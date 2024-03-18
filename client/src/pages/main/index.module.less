@@ -1,0 +1,28 @@
+.mainLayout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    height: 54px;
+    background: #30305c;
+    color: var(--color-white);
+
+    .logo {
+      font-size: 32px;
+      font-weight: 600;
+    }
+    .opts {
+    }
+  }
+  .body {
+    display: flex;
+    height: calc(100% - 56px);
+    .mainContainer {
+      flex: 1;
+    }
+  }
+}

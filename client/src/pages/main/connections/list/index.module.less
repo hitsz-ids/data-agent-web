@@ -1,0 +1,108 @@
+.connectionLeft {
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--box-shadow-base);
+  width: 280px;
+  .leftTop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    border-bottom: 1px solid var(--border-color-base);
+  }
+  .leftMiddle {
+    flex: 1;
+    height: calc(100% - 100px - 30px);
+    padding: 12px;
+    overflow-y: auto;
+    .searchInput {
+      margin: 12px 0;
+      :global(.ant-input-group-addon) {
+        display: none;
+      }
+    }
+    .connectionList {
+      display: block;
+      overflow-y: auto;
+      .item {
+        display: flex;
+        position: relative;
+        margin-bottom: 12px;
+        padding: 8px 11px;
+        border: 1px solid var(--border-color-base);
+        cursor: pointer;
+        .checkboxArea {
+          display: flex;
+          align-items: center;
+          margin-right: 6px;
+          .ant-checkbox-wrapper {
+            .ant-checkbox {
+              .ant-checkbox-inner {
+                border-color: var(--border-color-base);
+                &::after {
+                  background-color: var(--bg-color-active);
+                }
+              }
+              &.ant-checkbox-checked {
+                .ant-checkbox-inner {
+                  border-color: var(--bg-color-active);
+                  &::after {
+                    border-color: var(--bg-color-active);
+                  }
+                }
+              }
+            }
+          }
+        }
+        .infoArea {
+          flex: 1;
+          cursor: inherit;
+          .name {
+            line-height: 20px;
+            color: var(--text-color-regular);
+          }
+          .time {
+            margin-top: 4px;
+            font-size: 12px;
+            line-height: 16px;
+            color: var(--text-color-secondary);
+          }
+          .deleteIcon {
+            position: absolute;
+            display: none;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+
+        &:hover {
+          .deleteIcon {
+            display: block;
+          }
+        }
+
+        &.isActive {
+          background: var(--bg-color-active);
+          border-color: var(--bg-color-active);
+        }
+      }
+      &.deleteState {
+        .deleteIcon {
+          display: none !important;
+        }
+      }
+    }
+  }
+  .leftBottom {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+    padding-left: 30px;
+    height: 36px;
+    background-color: var(--bg-color-cell);
+    .deleteBtn {
+      cursor: pointer;
+    }
+  }
+}

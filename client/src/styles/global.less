@@ -1,0 +1,48 @@
+html,
+body {
+  position: relative;
+  height: 100%;
+  min-height: 664px;
+  min-width: 744px;
+  font-size: 14px;
+  color: var(--text-color-primary);
+  font-family:
+    PingFang SC,
+    Helvetica Neue,
+    Helvetica,
+    Hiragino Sans GB,
+    Verdana,
+    Source Code Pro，Microsoft YaHei;
+}
+
+.text-overflow {
+  overflow: hidden;
+  white-space: nowrap;
+  word-break: keep-all;
+  text-overflow: ellipsis;
+}
+
+// 修改账号密码自动回填后input背景变色问题
+input:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-text) !important; // 填充状态下的字体颜色
+  transition: background-color 0s 9999999999s;
+  caret-color: var(--color-text); // 光标的颜色
+}
+
+// 滚动条整体
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  padding: 1px;
+}
+
+// 滚动条滑块
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: var(--color-fill);
+}
+
+// 取消chrome浏览器 :focus样式
+:focus {
+  outline: none;
+}

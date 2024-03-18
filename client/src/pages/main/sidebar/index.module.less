@@ -1,0 +1,33 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 19px;
+  width: 112px;
+  border-right: 1px solid var(--border-color-base);
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 74px;
+    height: 74px;
+    margin-bottom: 27px;
+    border-radius: 6px;
+    cursor: pointer;
+    .icon {
+      font-size: 24px;
+    }
+    .title {
+      margin-top: 8px;
+    }
+    &.isActive {
+      color: #424ac9;
+      background: linear-gradient(
+        59.93deg,
+        rgba(63, 65, 196, 0.1) 0%,
+        rgba(89, 158, 247, 0.1) 146.06%
+      );
+    }
+  }
+}

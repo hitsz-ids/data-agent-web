@@ -1,0 +1,50 @@
+import path from 'path';
+import { ConfigEnv, UserConfig, defineConfig, loadEnv, splitVendorChunkPlugin } from 'vite';
+import react from '@vitejs/plugin-react';
+import viteCompression from 'vite-plugin-compression';
+
+import { wrapperEnv } from './build/getEnv';
+const resolve = (dir: string) => path.join(__dirname, dir);
+export default defineConfig((mode: ConfigEnv): UserConfig => {
+  const env = loadEnv(mode.mode, process.cwd());
+  const viteEnv = wrapperEnv(env);
+
+  return {
+    server: {
+      port: viteEnv.VITE_PORT,
+      proxy: {
+        '^/api': {
+          target: 'http://localhost:10821'
+        }
+      },
+      open: viteEnv.VITE_OPEN
+    },
+    resolve: { alias: { '@': resolve('src') } },
+    build: {
+      outDir: 'dist',
+      minify: 'esbuild',
+      rollupOptions: {
+        output: {
+          chunkFileNames: 'assets/js/[name]-[hash].js',
+          entryFileNames: 'assets/js/[name]-[hash].js',
+          assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
+        }
+      }
+    },
+    css: {
+      devSourcemap: true
+    },
+    plugins: [
+      react(),
+      splitVendorChunkPlugin(),
+      viteEnv.VITE_BUILD_GZIP &&
+        viteCompression({
+          verbose: true,
+          disable: false,
+          threshold: 102400,
+          algorithm: 'gzip',
+          ext: '.gz'
+        })
+    ]
+  };
+});
