@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './index.less.module.less';
+import styles from './index.module.less';
 import Iconfont from '../iconfont';
 import Input, { SearchProps } from 'antd/es/input';
 

@@ -1,0 +1,55 @@
+.mainContainer {
+  position: relative;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  .left {
+    position: relative;
+    display: flex;
+    box-shadow: var(--box-shadow-base);
+    height: 100%;
+    .leftBox {
+      position: relative;
+      height: 100%;
+      opacity: 1;
+      width: 280px;
+      transition: all 0.3s ease-in;
+      overflow: hidden;
+      & > div {
+        width: 280px;
+      }
+    }
+    .openBtn {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      bottom: 70px;
+      right: -55px;
+      width: 56px;
+      height: 36px;
+      border: 1px solid var(--border-color-cell);
+      border-left: none;
+      border-top-right-radius: 56px;
+      border-bottom-right-radius: 56px;
+      background-color: var(--color-white);
+      z-index: 10;
+      opacity: 0;
+      cursor: pointer;
+      transition: all 0.3s ease-in;
+    }
+    &.isHidden {
+      .leftBox {
+        opacity: 0;
+        width: 0;
+      }
+      .openBtn {
+        opacity: 1;
+      }
+    }
+  }
+  .right {
+    flex: 1;
+    background-color: var(--bg-color-main);
+  }
+}

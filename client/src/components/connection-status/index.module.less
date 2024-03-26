@@ -1,0 +1,17 @@
+.connectionStatusIcon {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  &.syncing {
+    background-color: var(--color-success);
+  }
+  &.success {
+    background-color: var(--color-success);
+  }
+  &.warning {
+    background-color: var(--color-warning);
+  }
+  &.failed {
+    background-color: var(--color-error);
+  }
+}

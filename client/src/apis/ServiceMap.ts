@@ -12,6 +12,7 @@ class ServiceMap {
   static connectionSync = '/api/connections/sync';
   static connectionSyncStatus = '/api/connections/sync/status';
   static connectionSyncInterrupt = '/api/connections/sync/interrupt';
+  static connectionDriverList = '/api/connections/driver/list';
 
   static connectionTest = '/api/connections/test';
 }

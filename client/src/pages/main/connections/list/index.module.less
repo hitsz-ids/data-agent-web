@@ -1,36 +1,39 @@
 .connectionLeft {
-  display: flex;
-  flex-direction: column;
-  box-shadow: var(--box-shadow-base);
-  width: 280px;
+  height: 100%;
   .leftTop {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 24px 12px;
     height: 100px;
     border-bottom: 1px solid var(--border-color-base);
   }
   .leftMiddle {
     flex: 1;
-    height: calc(100% - 100px - 30px);
+    height: calc(100% - 100px - 96px);
     padding: 12px;
-    overflow-y: auto;
     .searchInput {
-      margin: 12px 0;
+      margin-top: 23px;
+      margin-bottom: 15px;
       :global(.ant-input-group-addon) {
         display: none;
       }
     }
     .connectionList {
       display: block;
+      height: calc(100% - 75px);
       overflow-y: auto;
       .item {
         display: flex;
         position: relative;
         margin-bottom: 12px;
-        padding: 8px 11px;
-        border: 1px solid var(--border-color-base);
+        padding: 0 11px;
+        width: 100%;
+        height: 46px;
+        border: 1px solid var(--bg-color-cell);
+        border-radius: 5px;
         cursor: pointer;
+        overflow-x: hidden;
         .checkboxArea {
           display: flex;
           align-items: center;
@@ -56,28 +59,33 @@
         }
         .infoArea {
           flex: 1;
+          display: flex;
+          align-items: center;
+          min-width: 0;
           cursor: inherit;
-          .name {
-            line-height: 20px;
-            color: var(--text-color-regular);
+          .info {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            .name {
+              line-height: 20px;
+              max-width: calc(100% - 16px - 50px);
+              margin: 0 7px;
+            }
           }
-          .time {
-            margin-top: 4px;
-            font-size: 12px;
-            line-height: 16px;
-            color: var(--text-color-secondary);
-          }
-          .deleteIcon {
-            position: absolute;
-            display: none;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-          }
+        }
+        .moreIcon {
+          position: absolute;
+          display: none;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
         }
 
         &:hover {
-          .deleteIcon {
+          background: var(--bg-color-hover);
+
+          .moreIcon {
             display: block;
           }
         }
@@ -88,7 +96,7 @@
         }
       }
       &.deleteState {
-        .deleteIcon {
+        .moreIcon {
           display: none !important;
         }
       }
@@ -97,12 +105,26 @@
   .leftBottom {
     display: flex;
     align-items: center;
-    margin: 20px;
-    padding-left: 30px;
+    justify-content: space-between;
+    margin: 0 20px 20px;
+    padding: 11px 13px;
     height: 36px;
-    background-color: var(--bg-color-cell);
-    .deleteBtn {
+    border: 1px solid var(--bg-color-cell);
+    background-color: var(--bg-color-active);
+    .checkAll {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .cancelDelete {
       cursor: pointer;
     }
   }
+}
+
+.dropdownIcon {
+  display: flex;
+  align-items: center;
+  width: 60px;
+  height: 30px;
 }

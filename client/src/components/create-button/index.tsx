@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './index.less.module.less';
+import styles from './index.module.less';
 import classNames from 'classnames';
 import Iconfont from '../iconfont';
 
@@ -9,10 +9,10 @@ interface ICreateButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
 }
 
 const CreateButton: React.FC<ICreateButtonProps> = props => {
-  const { children } = props;
+  const { children, ...other } = props;
 
   return (
-    <button className={classNames(styles.createButton)}>
+    <button {...other} className={classNames(styles.createButton)}>
       <Iconfont className={styles.addIcon} code="add"></Iconfont>
       {children}
     </button>

@@ -1,6 +1,5 @@
 import { IConnectionListResponse, connectionListApi } from '@/apis/connections/ConnectionListApi';
 import { IConnectionItem } from '@/types/connections';
-import { useEffect } from 'react';
 import { atom, useSetRecoilState } from 'recoil';
 
 const connectionListState = atom<IConnectionItem[]>({
@@ -8,15 +7,15 @@ const connectionListState = atom<IConnectionItem[]>({
   default: []
 });
 
-const useConnectionList = (searchVal?: string) => {
+const useConnectionListApi = () => {
   const setList = useSetRecoilState(connectionListState);
 
-  useEffect(() => {
+  return (searchVal?: string) =>
     connectionListApi
       .request({ pageNo: 1, pageSize: 20, searchVal })
       .then((res: IConnectionListResponse) => {
         setList(res.rows);
+        return res.rows;
       });
-  }, [searchVal]);
 };
-export { connectionListState, useConnectionList };
+export { connectionListState, useConnectionListApi };

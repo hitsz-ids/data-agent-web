@@ -62,14 +62,24 @@ abstract class BaseApi<REQ, RES> {
       method: this.method,
       ...(this.method.toUpperCase() === 'GET' ? { params: data } : { data })
     };
-    return this.axiosInstance
+    let cacheResolve: (data: RES) => void, cacheReject: (response: BaseResponse<RES>) => void;
+    const promise = new Promise<RES>((resolve, reject) => {
+      cacheResolve = resolve;
+      cacheReject = reject;
+    });
+    this.axiosInstance
       .request<BaseResponse<RES>>(config)
       .then(res => {
-        return res.data.data;
+        if (res.data.code == 0) {
+          cacheResolve(res.data.data);
+        } else {
+          cacheReject(res.data);
+        }
       })
       .finally(() => {
         this.loading = false;
       });
+    return promise;
   }
 }
 

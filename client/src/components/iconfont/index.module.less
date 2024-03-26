@@ -1,26 +1,35 @@
 .iconBox {
+  display: inline-block;
   color: var(--color-icon-primary);
   font-style: normal;
   line-height: 0;
   text-align: center;
   text-transform: none;
   vertical-align: -0.125em;
+  &.isDisabled {
+    cursor: not-allowed;
+    color: var(--text-color-secondary) !important;
+  }
 }
 
-.Iconfont {
+.iconfont {
   width: 1em;
   height: 1em;
   fill: currentColor;
   line-height: 1;
-  vertical-align: -0.15em;
+  vertical-align: -0.125em;
   overflow: hidden;
-}
-
-.isDisabled {
-  cursor: not-allowed;
-  color: var(--text-color-regular) !important;
 }
 
 .cursor {
   cursor: pointer;
+}
+.withWord {
+  margin-right: 6px;
+}
+
+.hover {
+  &:hover {
+    color: var(--color-primary);
+  }
 }

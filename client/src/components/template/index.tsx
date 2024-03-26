@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 
-import styles from './index.less.module.less';
+import styles from './index.module.less';
 
-const MyComponent: React.FC = () => {
+interface IMyComponentProps {}
+
+const MyComponent: React.FC<IMyComponentProps> = props => {
   useEffect(() => {
     // Fetch data or perform any side effects here
   }, []);

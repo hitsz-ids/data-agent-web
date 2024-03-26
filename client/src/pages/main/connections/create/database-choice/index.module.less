@@ -1,0 +1,28 @@
+.databsseChoice {
+  .dbList {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 21px;
+    .dbItem {
+      display: flex;
+      align-items: center;
+      margin: 21px 0;
+      padding: 24px 15px;
+      width: 46%;
+      border: 1px solid var(--border-color-cell);
+      border-radius: 10px;
+      cursor: pointer;
+      .typeIcon {
+        margin-right: 10px;
+      }
+      &:hover {
+        background: var(--bg-color-hover);
+      }
+      &.active {
+        background-color: rgba(66, 74, 201, 0.1);
+        border-color: var(--color-primary);
+      }
+    }
+  }
+}
