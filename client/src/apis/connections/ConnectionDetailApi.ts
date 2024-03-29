@@ -1,6 +1,7 @@
 import { ServiceMap } from '../ServiceMap';
 import BaseApi from '../BaseApi';
-import { ConnectionSyncStatus, ConnectionType } from '@/types/connections';
+import { ConnectionSyncStatus, ConnectionType } from '@/constants/connection';
+import { IConnectionDriverItem } from '@/types/connections';
 
 export interface IConnectionDetailRequest {
   id: number;
@@ -19,10 +20,7 @@ export interface IConnectionDetailResponse {
   oracleLoginRole?: string; // type为oracle必传 normal | sysdba |sysoper
   instance?: string; // type为sqlserver必传
   status: ConnectionSyncStatus;
-  driver: {
-    name: string;
-    classpath: string;
-  };
+  driver: IConnectionDriverItem;
   extendFields: object[];
 }
 

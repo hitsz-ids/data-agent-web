@@ -3,6 +3,7 @@ import axios, {
   AxiosInstance,
   AxiosRequestConfig,
   AxiosResponse,
+  Canceler,
   CreateAxiosDefaults,
   InternalAxiosRequestConfig,
   Method
@@ -20,6 +21,7 @@ abstract class BaseApi<REQ, RES> {
   private url: string;
   private method: Method | string;
   public loading: boolean = false;
+  private canceler: Canceler | undefined;
 
   constructor(opts: CreateAxiosDefaults<REQ>) {
     const { url, method } = opts;
@@ -35,6 +37,9 @@ abstract class BaseApi<REQ, RES> {
   }
 
   private requestInterceptor(axiosConfig: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
+    const source = axios.CancelToken.source();
+    this.canceler = source.cancel;
+    axiosConfig.cancelToken = source.token;
     return axiosConfig;
   }
 
@@ -43,6 +48,10 @@ abstract class BaseApi<REQ, RES> {
   }
 
   private async responseErrorInterceptor(error: any): Promise<any> {
+    const { code } = error;
+    if (code === 'ERR_CANCELED') {
+      return 'ERR_CANCELED';
+    }
     const { status } = error?.response || {};
     if (status === 404) {
       //
@@ -80,6 +89,13 @@ abstract class BaseApi<REQ, RES> {
         this.loading = false;
       });
     return promise;
+  }
+
+  cancel() {
+    if (this.canceler) {
+      this.canceler('cancel');
+      this.canceler = undefined;
+    }
   }
 }
 

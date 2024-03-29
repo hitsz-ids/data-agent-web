@@ -5,31 +5,30 @@ import { IConnectionDriverItem } from '@/types/connections';
 import { ConnectionType } from '@/constants/connection';
 import ConnectionTypeIcon, { connectionIconsMap } from '@/components/connection-type';
 import classNames from 'classnames';
-import { Select } from 'antd';
+import { Form, Input, Select } from 'antd';
 import { connectionDriverListApi } from '@/apis/connections/ConnectionDriverListApi';
+import LinearButton from '@/components/linear-button';
+import { DefaultOptionType } from 'antd/es/select';
 
 interface IDatabaseChoiceProps {
-  change: (type: ConnectionType, driver: IConnectionDriverItem) => void;
+  next: (type: ConnectionType, driver: IConnectionDriverItem) => void;
 }
 
 const DatabaseChoice: React.FC<IDatabaseChoiceProps> = props => {
   const [driverList, setDriverList] = useState<IConnectionDriverItem[]>([]); // 驱动列表
   const [curDbType, setCurDbType] = useState<ConnectionType>(ConnectionType.MYSQL); // 当前数据库类型
   const [curDriverIndex, setCurDriverIndex] = useState<number>(0); // 当前驱动索引
-
-  const { change } = props;
+  const form = Form.useForm()[0];
+  const { next } = props;
 
   useEffect(() => {
     connectionDriverListApi.request({ pageNo: 1, pageSize: 1000, type: curDbType }).then(res => {
       setDriverList(res.rows || []);
+      form.setFieldsValue({ classpath: res.rows[0].classpath });
     });
   }, [curDbType]);
 
-  useEffect(() => {
-    change(curDbType, driverList[curDriverIndex]);
-  }, [curDriverIndex, curDbType]);
-
-  const options = () => {
+  const prepare: () => DefaultOptionType[] = () => {
     return driverList.map((item, index) => ({ label: item.name, value: index }));
   };
 
@@ -37,7 +36,7 @@ const DatabaseChoice: React.FC<IDatabaseChoiceProps> = props => {
     <div className={styles.databsseChoice}>
       <div className={styles.dbList}>
         {Object.entries(connectionIconsMap).map(([type, name]) => {
-          let _type = type as unknown as ConnectionType;
+          const _type = type as unknown as ConnectionType;
           return (
             <div
               key={type}
@@ -46,25 +45,40 @@ const DatabaseChoice: React.FC<IDatabaseChoiceProps> = props => {
                 setCurDbType(_type);
               }}
             >
-              <ConnectionTypeIcon
-                className={styles.typeIcon}
-                type={type as unknown as ConnectionType}
-              />
-              {name}
+              <ConnectionTypeIcon type={_type} showName />
             </div>
           );
         })}
       </div>
-      <div>
-        <Select
-          defaultValue={0}
-          value={curDriverIndex}
-          onChange={index => {
-            setCurDriverIndex(parseInt(index + ''));
+      <div className={styles.driver}>
+        <Form form={form} labelAlign="left" labelCol={{ span: 3 }}>
+          <Form.Item label="驱动" name="driver" initialValue={0}>
+            <Select
+              value={curDriverIndex}
+              onChange={(index: number) => {
+                setCurDriverIndex(index);
+                form.setFieldsValue({ classpath: driverList[index].classpath });
+              }}
+              options={prepare()}
+            />
+          </Form.Item>
+          <Form.Item
+            label="Class"
+            name="classpath"
+            initialValue={driverList[curDriverIndex] ? driverList[curDriverIndex].classpath : ''}
+          >
+            <Input type="text" disabled />
+          </Form.Item>
+        </Form>
+      </div>
+      <div className={styles.operates}>
+        <LinearButton
+          onClick={() => {
+            next(Number(curDbType), driverList[curDriverIndex]);
           }}
-          options={options()}
-        />
-        <div>{driverList[curDriverIndex]?.name}</div>
+        >
+          下一步
+        </LinearButton>
       </div>
     </div>
   );

@@ -2,29 +2,33 @@ import React, { useEffect } from 'react';
 import { Checkbox, Dropdown, message } from 'antd';
 
 import styles from './index.module.less';
-import CreateButton from '@/components/create-button';
+import LinearButton from '@/components/linear-button';
 import SearchInput from '@/components/search-input';
 import { connectionDeleteApi } from '@/apis/connections/ConnectionDeleteApi';
 import classNames from 'classnames';
 import Iconfont from '@/components/iconfont';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { connectionListState, useConnectionListApi } from '@/states/connection';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  connectionIdState,
+  connectionListState,
+  connectionPageState,
+  useConnectionListApi
+} from '@/states/connection';
 import { showLeftBoxState } from '@/states/main';
 import ConnectionStatusIcon from '@/components/connection-status';
 import ConnectionTypeIcon from '@/components/connection-type';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { connectionSyncApi } from '@/apis/connections/ConnectionSyncApi';
 
-interface IConnectionListProps {
-  switchDetail(id: number, callback: (isSuccess: boolean) => void): void;
-  switchCreate(): void;
-}
+interface IConnectionListProps {}
 
-const ConnectionList: React.FC<IConnectionListProps> = props => {
+const ConnectionList: React.FC<IConnectionListProps> = () => {
   const [curId, setCurId] = React.useState<number>(0);
   const [deleteState, setDeleteState] = React.useState<boolean>(false);
-  const [connectionList] = useRecoilState(connectionListState);
-  const { switchDetail, switchCreate } = props;
+  const connectionList = useRecoilValue(connectionListState);
+  const setConnectionPageState = useSetRecoilState(connectionPageState);
+  const setConnectionIdState = useSetRecoilState(connectionIdState);
+
   const listApi = useConnectionListApi();
   const setShowLeftBox = useSetRecoilState(showLeftBoxState);
   const [checkedIds, setCheckedIds] = React.useState<number[]>([]);
@@ -39,7 +43,6 @@ const ConnectionList: React.FC<IConnectionListProps> = props => {
   };
 
   const handleSearch = (value: string) => {
-    if (!value) return;
     getList(value);
   };
 
@@ -107,13 +110,15 @@ const ConnectionList: React.FC<IConnectionListProps> = props => {
   return (
     <div className={styles.connectionLeft}>
       <div className={styles.leftTop}>
-        <CreateButton
+        <LinearButton
+          size="large"
           onClick={() => {
-            switchCreate();
+            setConnectionPageState('create');
+            setConnectionIdState(0);
           }}
         >
-          新建连接
-        </CreateButton>
+          <Iconfont code="add">新建连接</Iconfont>
+        </LinearButton>
       </div>
       <div className={styles.leftMiddle}>
         <div className={styles.searchInput}>
@@ -131,9 +136,9 @@ const ConnectionList: React.FC<IConnectionListProps> = props => {
                 className={classNames(styles.item, curId === item.id ? styles.isActive : null)}
                 onClick={() => {
                   if (deleteState) return;
-                  switchDetail(item.id, (isSuccess: boolean) => {
-                    if (isSuccess) setCurId(item.id);
-                  });
+                  setCurId(item.id);
+                  setConnectionIdState(item.id);
+                  setConnectionPageState('detail');
                 }}
               >
                 {deleteState && (
@@ -158,11 +163,9 @@ const ConnectionList: React.FC<IConnectionListProps> = props => {
                   }}
                   trigger={['click']}
                 >
-                  <Iconfont
-                    onClick={event => event.stopPropagation()}
-                    className={styles.moreIcon}
-                    code={'more'}
-                  ></Iconfont>
+                  <span onClick={event => event.stopPropagation()}>
+                    <Iconfont className={styles.moreIcon} code={'more'}></Iconfont>
+                  </span>
                 </Dropdown>
               </div>
             );
@@ -171,7 +174,7 @@ const ConnectionList: React.FC<IConnectionListProps> = props => {
       </div>
       <div className={styles.leftBottom}>
         {!deleteState ? (
-          <>
+          <React.Fragment>
             <Iconfont
               onClick={() => {
                 setDeleteState(true);
@@ -189,13 +192,13 @@ const ConnectionList: React.FC<IConnectionListProps> = props => {
                 collapseLeftBox();
               }}
             ></Iconfont>
-          </>
+          </React.Fragment>
         ) : (
-          <>
+          <React.Fragment>
             <Checkbox
               className={styles.checkAll}
               indeterminate={checkedIds.length > 0 && checkedIds.length < connectionList.length}
-              value={checkAll}
+              checked={checkAll}
               onChange={value => {
                 setCheckAll(value.target.checked);
                 setCheckedIds(value.target.checked ? connectionList.map(item => item.id) : []);
@@ -224,7 +227,7 @@ const ConnectionList: React.FC<IConnectionListProps> = props => {
             >
               取消
             </span>
-          </>
+          </React.Fragment>
         )}
       </div>
     </div>

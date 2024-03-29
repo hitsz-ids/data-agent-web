@@ -30,7 +30,9 @@ const MainContainer: React.FC<IMainContainerProps> = props => {
           </div>
         )}
       </div>
-      <div className={styles.right}>{right}</div>
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <div className={styles.right}>{right}</div>
+      </React.Suspense>
     </div>
   );
 };

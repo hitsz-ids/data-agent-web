@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 
 import styles from './index.module.less';
-import { IConnectionContentProps } from '@/pages/main/connections';
 
-interface IEmptyComponentProps extends IConnectionContentProps {}
+interface IEmptyComponentProps {}
 
-const EmptyComponent: React.FC<IEmptyComponentProps> = props => {
+const EmptyComponent: React.FC<IEmptyComponentProps> = () => {
   useEffect(() => {
     // Fetch data or perform any side effects here
   }, []);

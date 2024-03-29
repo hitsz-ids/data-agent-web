@@ -5,19 +5,24 @@ import Steps, { IStepItem } from '@/components/steps';
 import { DatabaseConfigurationStep, ConnectionType } from '@/constants/connection';
 import DatabaseChoice from './database-choice';
 import { IConnectionDriverItem } from '@/types/connections';
+import ConnectionInfoComplete from './connection-info-complete';
 
 interface IConnectionCreateProps {}
 
 const createSteps: IStepItem[] = [{ label: '选择数据库' }, { label: '配置连接信息' }];
 
-const ConnectionInfoComplete = () => {
-  return <div>ConnectionInfoComplete</div>;
-};
-
 const ConnectionCreate: React.FC<IConnectionCreateProps> = () => {
   const [curStepNum, setCurStepNum] = useState(DatabaseConfigurationStep.TYPE_SELECTION);
-  const databaseChange = (type: ConnectionType, driver: IConnectionDriverItem) => {
-    console.log(type, driver);
+  const [curDriver, setCurDriver] = useState<IConnectionDriverItem | undefined>(undefined); // 当前驱动信息 [驱动名称, 驱动类型
+  const [curType, setCurType] = useState<ConnectionType>(ConnectionType.MYSQL); // 当前驱动信息 [驱动名称, 驱动类型
+  const next = (type: ConnectionType, driver: IConnectionDriverItem) => {
+    setCurType(type);
+    setCurDriver(driver);
+    setCurStepNum(DatabaseConfigurationStep.DETAIL_COMPLETION);
+  };
+
+  const handleCancel = () => {
+    setCurStepNum(DatabaseConfigurationStep.TYPE_SELECTION);
   };
 
   return (
@@ -25,29 +30,14 @@ const ConnectionCreate: React.FC<IConnectionCreateProps> = () => {
       <div className={styles.container}>
         <Steps className={styles.createSteps} items={createSteps} curStepNum={curStepNum}></Steps>
         {curStepNum == DatabaseConfigurationStep.TYPE_SELECTION ? (
-          <DatabaseChoice change={databaseChange}></DatabaseChoice>
+          <DatabaseChoice next={next}></DatabaseChoice>
         ) : (
-          <ConnectionInfoComplete></ConnectionInfoComplete>
+          <ConnectionInfoComplete
+            type={curType}
+            driver={curDriver}
+            cancel={handleCancel}
+          ></ConnectionInfoComplete>
         )}
-        <div className={styles.next}>
-          {curStepNum == DatabaseConfigurationStep.TYPE_SELECTION ? (
-            <button
-              onClick={() => {
-                setCurStepNum(DatabaseConfigurationStep.DETAIL_COMPLETION);
-              }}
-            >
-              下一步
-            </button>
-          ) : (
-            <button
-              onClick={() => {
-                setCurStepNum(DatabaseConfigurationStep.TYPE_SELECTION);
-              }}
-            >
-              上一步
-            </button>
-          )}
-        </div>
       </div>
     </div>
   );

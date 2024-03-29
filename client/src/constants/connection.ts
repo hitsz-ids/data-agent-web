@@ -17,3 +17,14 @@ export enum DatabaseConfigurationStep {
   TYPE_SELECTION = 1,
   DETAIL_COMPLETION = 2
 }
+
+export enum OracleParamKey {
+  SID = 'SID',
+  SERVICE_NAME = 'SERVICE_NAME'
+}
+
+export enum OracleLoginRole {
+  NORMAL = 'normal',
+  SYS_DBA = 'sysdba',
+  SYS_OPER = 'sysoper'
+}

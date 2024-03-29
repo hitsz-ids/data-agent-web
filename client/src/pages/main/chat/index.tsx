@@ -1,14 +1,17 @@
 import React from 'react';
 
 import styles from './index.module.less';
-import CreateButton from '@/components/create-button';
+import LinearButton from '@/components/linear-button';
+import Iconfont from '@/components/iconfont';
 
 interface IChatProps {}
 
 const Chat: React.FC<IChatProps> = () => {
   return (
     <div className={styles.chatBox}>
-      <CreateButton>新建对话</CreateButton>
+      <LinearButton size="large">
+        <Iconfont code="add">新建对话</Iconfont>
+      </LinearButton>
     </div>
   );
 };

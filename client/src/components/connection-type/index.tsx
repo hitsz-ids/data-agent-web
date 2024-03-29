@@ -15,15 +15,19 @@ export const connectionIconsMap: { [key in ConnectionType]: string } = {
 
 interface IConnectionTypeIconProps extends React.HTMLAttributes<HTMLDivElement> {
   type: ConnectionType;
+  showName?: boolean;
   className?: string;
 }
 
 const ConnectionTypeIcon: React.FC<IConnectionTypeIconProps> = props => {
+  const { type, showName, className } = props;
   return (
     <Iconfont
-      className={classNames(styles.typeIcon, props.className)}
-      code={connectionIconsMap[props.type].toLowerCase()}
-    ></Iconfont>
+      className={classNames(styles.typeIcon, className)}
+      code={connectionIconsMap[type].toLowerCase()}
+    >
+      {showName ? connectionIconsMap[type] : null}
+    </Iconfont>
   );
 };
 
