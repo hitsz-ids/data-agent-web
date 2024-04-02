@@ -2,18 +2,32 @@ import React, { useEffect, useState } from 'react';
 
 import styles from './index.module.less';
 import { IConnectionDriverItem } from '@/types/connections';
-import { ConnectionType, OracleLoginRole, OracleParamKey } from '@/constants/connection';
+import {
+  ConnectionSyncStatus,
+  ConnectionType,
+  OracleLoginRole,
+  OracleParamKey
+} from '@/constants/connections';
 import ConnectionTypeIcon, { connectionIconsMap } from '@/components/connection-type';
-import { Button, Form, Input, Radio, RadioChangeEvent, Select, message } from 'antd';
+import { Button, Form, Input, Progress, Radio, RadioChangeEvent, Select, message } from 'antd';
 import LinearButton from '@/components/linear-button';
-import { connectionTestApi } from '@/apis/connections/ConnectionTestApi';
+import { connectionsTestApi } from '@/apis/connections/ConnectionsTestApi';
 import { DefaultOptionType } from 'antd/es/select';
 import {
-  IConnectionCreateRequest,
-  connectionCreateApi
-} from '@/apis/connections/ConnectionCreateApi';
-import { IConnectionDetailResponse } from '@/apis/connections/ConnectionDetailApi';
-import { useConnectionListApi } from '@/states/connection';
+  IConnectionsCreateRequest,
+  connectionsCreateApi
+} from '@/apis/connections/ConnectionsCreateApi';
+import { IConnectionDetailResponse } from '@/apis/connections/ConnectionsDetailApi';
+import {
+  connectionsIdState,
+  connectionsPageState,
+  useConnectionsListApi
+} from '@/states/connection';
+import { useSetRecoilState } from 'recoil';
+import { connectionsUpdateApi } from '@/apis/connections/ConnectionsUpdateApi';
+import classNames from 'classnames';
+import ConnectionStatusIcon from '@/components/connection-status';
+import { connectionsSyncInterruptApi } from '@/apis/connections/ConnectionsInterruptApi';
 
 interface IConnectionInfoCompleteProps {
   type: ConnectionType;
@@ -21,22 +35,34 @@ interface IConnectionInfoCompleteProps {
   connectionDetail?: IConnectionDetailResponse;
   cancel: () => void;
 }
+
 const oracleLoginRoleOptions: DefaultOptionType[] = [
   { label: OracleLoginRole.NORMAL, value: OracleLoginRole.NORMAL },
   { label: OracleLoginRole.SYS_DBA, value: OracleLoginRole.SYS_DBA },
   { label: OracleLoginRole.SYS_OPER, value: OracleLoginRole.SYS_OPER }
 ];
+
+export const connectionStatusClassMap = {
+  [ConnectionSyncStatus.CREATED]: styles.warning,
+  [ConnectionSyncStatus.SYNCHRONIZING]: null,
+  [ConnectionSyncStatus.SUCCESS]: null,
+  [ConnectionSyncStatus.INTERRUPTED]: styles.failed,
+  [ConnectionSyncStatus.FAILED]: styles.failed
+};
+
 const ConnectionInfoComplete: React.FC<IConnectionInfoCompleteProps> = props => {
+  const { type, driver, connectionDetail, cancel } = props;
   const [testLoading, setTestLoading] = useState(false);
   const [authVisible, setAuthVisible] = useState<boolean | null>(null);
-  const { type, driver, connectionDetail, cancel } = props;
-  const connectionListApi = useConnectionListApi();
+  const connectionListApi = useConnectionsListApi();
+  const setConnectionId = useSetRecoilState(connectionsIdState);
+  const setConnectionsPageState = useSetRecoilState(connectionsPageState);
   const form = Form.useForm()[0];
 
   useEffect(() => {
     formValuesChange();
     return () => {
-      connectionTestApi.cancel();
+      connectionsTestApi.cancel();
     };
   }, []);
 
@@ -55,7 +81,7 @@ const ConnectionInfoComplete: React.FC<IConnectionInfoCompleteProps> = props => 
   const handleTest = () => {
     const testParam = getFormValues();
     setTestLoading(true);
-    connectionTestApi
+    connectionsTestApi
       .request(testParam)
       .then(() => {
         message.success('连接成功');
@@ -66,13 +92,24 @@ const ConnectionInfoComplete: React.FC<IConnectionInfoCompleteProps> = props => 
   };
 
   const handleSubmit = () => {
-    connectionCreateApi.request(getFormValues()).then(() => {
+    connectionsCreateApi.request(getFormValues()).then(res => {
       message.success('数据接入创建成功');
+      setConnectionId(res.id);
+      setConnectionsPageState('detail');
       connectionListApi();
     });
   };
 
-  const getFormValues: () => IConnectionCreateRequest = () => {
+  const handleUpdate = () => {
+    connectionsUpdateApi.request(getFormValues()).then(res => {
+      message.success('数据接入更新成功');
+      setConnectionId(res.id);
+      setConnectionsPageState('detail');
+      connectionListApi();
+    });
+  };
+
+  const getFormValues: () => IConnectionsCreateRequest = () => {
     const formValues = form.getFieldsValue();
     for (const key in formValues) {
       if (key === 'URL' || key === 'auth') continue;
@@ -126,11 +163,74 @@ const ConnectionInfoComplete: React.FC<IConnectionInfoCompleteProps> = props => 
     form.setFieldValue('password', '');
   };
 
+  const renderMessageBox = () => {
+    const { status = ConnectionSyncStatus.CREATED } = connectionDetail || {};
+    let element = null;
+    switch (status) {
+      case ConnectionSyncStatus.SYNCHRONIZING:
+        element = (
+          <div className={styles.syncProgress}>
+            <Progress
+              style={{
+                margin: 0
+              }}
+              percent={30}
+              strokeColor={'var(--color-process)'}
+              strokeWidth={26}
+            />
+            <LinearButton
+              className={styles.stopBtn}
+              onClick={() => {
+                interruptSync();
+              }}
+            >
+              终止
+            </LinearButton>
+          </div>
+        );
+        break;
+      case ConnectionSyncStatus.FAILED:
+        element = (
+          <div className={styles.syncStatus}>错误信息：{connectionDetail?.errorMessage}</div>
+        );
+        break;
+      case ConnectionSyncStatus.INTERRUPTED:
+        element = <div className={styles.syncStatus}>用户中断</div>;
+        break;
+      default:
+        break;
+    }
+    return (
+      <div className={classNames(styles.messageBox, connectionStatusClassMap[status])}>
+        {element}
+      </div>
+    );
+  };
+  const interruptSync = () => {
+    if (!connectionDetail) return;
+    const { id } = connectionDetail;
+    connectionsSyncInterruptApi.request({ id }).then(() => {
+      message.success('终止成功');
+      // TODO 更新列表详情
+    });
+  };
+
   return (
     <div className={styles.connectionInfoComplete}>
       <div className={styles.title}>
-        <ConnectionTypeIcon className={styles.icon} type={type} showName></ConnectionTypeIcon>
+        <ConnectionTypeIcon
+          className={styles.icon}
+          type={type}
+          size="large"
+          showName
+        ></ConnectionTypeIcon>
+        <ConnectionStatusIcon
+          status={connectionDetail?.status}
+          message={connectionDetail?.errorMessage}
+          renderType="text"
+        ></ConnectionStatusIcon>
       </div>
+      {connectionDetail ? renderMessageBox() : null}
       <Form
         form={form}
         className={styles.form}
@@ -221,7 +321,13 @@ const ConnectionInfoComplete: React.FC<IConnectionInfoCompleteProps> = props => 
           <Button className={styles.cancelBtn} onClick={() => cancel()}>
             取消
           </Button>
-          <LinearButton onClick={handleSubmit}>确定</LinearButton>
+          <LinearButton
+            onClick={() => {
+              connectionDetail ? handleUpdate() : handleSubmit();
+            }}
+          >
+            确定
+          </LinearButton>
         </div>
       </div>
     </div>

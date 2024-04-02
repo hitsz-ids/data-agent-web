@@ -1,7 +1,15 @@
 .connectionStatusIcon {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+  &.icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  &.text {
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: var(--font-size-small);
+    color: var(--color-white);
+  }
   &.syncing {
     background-color: var(--color-success);
   }

@@ -1,9 +1,11 @@
 import { ServiceMap } from '../ServiceMap';
 import BaseApi from '../BaseApi';
-import { ConnectionType } from '@/constants/connection';
 
-export interface IConnectionCreateRequest {
-  type: ConnectionType;
+export interface KnowledgeDetailRequest {
+  id: number;
+}
+
+export interface KnowledgeDetailResponse {
   name: string;
   host: string;
   port: string;
@@ -14,21 +16,15 @@ export interface IConnectionCreateRequest {
   oracleParamValue?: string; // type为oracle必传
   oracleLoginRole?: string; // type为oracle必传 normal | sysdba |sysoper
   instance?: string; // type为sqlserver必传
-  driver: {
-    name: string;
-    classpath: string;
-  };
   extendFields: object[];
 }
 
-export interface IConnectionCreateResponse {}
-
-class ConnectionCreateApi extends BaseApi<IConnectionCreateRequest, IConnectionCreateResponse> {
+class KnowledgeDetailApi extends BaseApi<KnowledgeDetailRequest, KnowledgeDetailResponse> {
   constructor() {
-    super({ url: ServiceMap.connectionCreate });
+    super({ url: ServiceMap.knowledgeDetail });
   }
 }
 
-const connectionCreateApi = new ConnectionCreateApi();
+const knowledgeDetailApi = new KnowledgeDetailApi();
 
-export { connectionCreateApi };
+export { knowledgeDetailApi };

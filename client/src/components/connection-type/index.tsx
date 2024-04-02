@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styles from './index.module.less';
-import { ConnectionType } from '@/constants/connection';
+import { ConnectionType } from '@/constants/connections';
 import Iconfont from '../iconfont';
 import classNames from 'classnames';
 
@@ -17,13 +17,14 @@ interface IConnectionTypeIconProps extends React.HTMLAttributes<HTMLDivElement> 
   type: ConnectionType;
   showName?: boolean;
   className?: string;
+  size: 'default' | 'large';
 }
 
 const ConnectionTypeIcon: React.FC<IConnectionTypeIconProps> = props => {
-  const { type, showName, className } = props;
+  const { type, showName, size = 'default', className } = props;
   return (
     <Iconfont
-      className={classNames(styles.typeIcon, className)}
+      className={classNames(styles.typeIcon, styles[size], className)}
       code={connectionIconsMap[type].toLowerCase()}
     >
       {showName ? connectionIconsMap[type] : null}

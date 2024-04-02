@@ -1,36 +1,36 @@
-import { connectionDetailApi } from '@/apis/connections/ConnectionDetailApi';
-import { IConnectionListResponse, connectionListApi } from '@/apis/connections/ConnectionListApi';
-import { ConnectionPage } from '@/pages/main/connections';
+import { connectionsDetailApi } from '@/apis/connections/ConnectionsDetailApi';
+import { IConnectionsListResponse, connectionListApi } from '@/apis/connections/ConnectionsListApi';
+import { ConnectionPages } from '@/pages/main/connections';
 import { IConnectionItem } from '@/types/connections';
 import { atom, atomFamily, selectorFamily, useSetRecoilState } from 'recoil';
 
-const connectionListState = atom<IConnectionItem[]>({
+const connectionsListState = atom<IConnectionItem[]>({
   key: 'ConnectionList',
   default: []
 });
 
-const connectionPageState = atom<ConnectionPage>({
+const connectionsPageState = atom<ConnectionPages>({
   key: 'ConnectionPage',
   default: 'empty'
 });
 
-const connectionIdState = atom({
+const connectionsIdState = atom({
   key: 'ConnectionId',
   default: 0
 });
 
-const connectionRequestIdState = atomFamily({
-  key: 'connectionRequestIdState',
+const connectionsRequestIdState = atomFamily({
+  key: 'connectionsRequestIdState',
   default: 0
 });
 
-const connectionInfoQuery = selectorFamily({
+const connectionsInfoQuery = selectorFamily({
   key: 'ConnectionInfoQuery',
   get:
     connectionId =>
     async ({ get }) => {
-      const id = get(connectionRequestIdState(connectionId));
-      const response = await connectionDetailApi.request({
+      const id = get(connectionsRequestIdState(connectionId));
+      const response = await connectionsDetailApi.request({
         id
       });
       return response;
@@ -38,24 +38,24 @@ const connectionInfoQuery = selectorFamily({
 });
 
 const useRefreshConnectionInfo = (id: number) => {
-  const setUserInfoQueryRequestID = useSetRecoilState(connectionRequestIdState(id));
+  const setUserInfoQueryRequestID = useSetRecoilState(connectionsRequestIdState(id));
   return () => {
     setUserInfoQueryRequestID(requestId => requestId + 1);
   };
 };
 
-const useConnectionListApi = () => {
-  const setList = useSetRecoilState(connectionListState);
+const useConnectionsListApi = () => {
+  const setList = useSetRecoilState(connectionsListState);
   return (searchVal?: string) => {
     if (connectionListApi.loading) return;
     return connectionListApi
       .request({ pageNo: 1, pageSize: 20, searchVal })
-      .then((res: IConnectionListResponse) => {
+      .then((res: IConnectionsListResponse) => {
         setList(res.rows);
         return res.rows;
       });
   };
 };
 
-export { connectionListState, connectionIdState, connectionPageState };
-export { connectionInfoQuery, useRefreshConnectionInfo, useConnectionListApi };
+export { connectionsListState, connectionsIdState, connectionsPageState };
+export { connectionsInfoQuery, useRefreshConnectionInfo, useConnectionsListApi };

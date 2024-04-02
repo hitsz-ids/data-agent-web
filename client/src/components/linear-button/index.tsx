@@ -4,7 +4,6 @@ import styles from './index.module.less';
 import classNames from 'classnames';
 
 interface ILinearButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
   size?: 'large' | 'default';
 }
 

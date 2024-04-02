@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import styles from './index.module.less';
 import { IConnectionDriverItem } from '@/types/connections';
-import { ConnectionType } from '@/constants/connection';
+import { ConnectionType } from '@/constants/connections';
 import ConnectionTypeIcon, { connectionIconsMap } from '@/components/connection-type';
 import classNames from 'classnames';
 import { Form, Input, Select } from 'antd';
-import { connectionDriverListApi } from '@/apis/connections/ConnectionDriverListApi';
+import { connectionsDriverListApi } from '@/apis/connections/ConnectionsDriverListApi';
 import LinearButton from '@/components/linear-button';
 import { DefaultOptionType } from 'antd/es/select';
 
@@ -15,14 +15,14 @@ interface IDatabaseChoiceProps {
 }
 
 const DatabaseChoice: React.FC<IDatabaseChoiceProps> = props => {
+  const { next } = props;
   const [driverList, setDriverList] = useState<IConnectionDriverItem[]>([]); // 驱动列表
   const [curDbType, setCurDbType] = useState<ConnectionType>(ConnectionType.MYSQL); // 当前数据库类型
   const [curDriverIndex, setCurDriverIndex] = useState<number>(0); // 当前驱动索引
   const form = Form.useForm()[0];
-  const { next } = props;
 
   useEffect(() => {
-    connectionDriverListApi.request({ pageNo: 1, pageSize: 1000, type: curDbType }).then(res => {
+    connectionsDriverListApi.request({ pageNo: 1, pageSize: 1000, type: curDbType }).then(res => {
       setDriverList(res.rows || []);
       form.setFieldsValue({ classpath: res.rows[0].classpath });
     });
@@ -35,7 +35,7 @@ const DatabaseChoice: React.FC<IDatabaseChoiceProps> = props => {
   return (
     <div className={styles.databsseChoice}>
       <div className={styles.dbList}>
-        {Object.entries(connectionIconsMap).map(([type, name]) => {
+        {Object.entries(connectionIconsMap).map(([type]) => {
           const _type = type as unknown as ConnectionType;
           return (
             <div

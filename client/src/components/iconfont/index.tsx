@@ -18,7 +18,7 @@ const Iconfont = React.memo((props: IIconfontProps) => {
         className,
 
         disabled ? styles.disabled : null,
-        !disabled && pointer ? styles.cursor : null,
+        !disabled && pointer ? styles.pointer : null,
         !disabled && hover ? styles.hover : null
       )}
       onClick={disabled ? undefined : onClick}

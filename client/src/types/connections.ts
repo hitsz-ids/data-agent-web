@@ -1,4 +1,4 @@
-import { ConnectionSyncStatus, ConnectionType } from '@/constants/connection';
+import { ConnectionSyncStatus, ConnectionType } from '@/constants/connections';
 
 export interface IConnectionItem {
   id: number;

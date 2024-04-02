@@ -1,6 +1,6 @@
 import { ServiceMap } from '../ServiceMap';
 import BaseApi from '../BaseApi';
-import { ConnectionSyncStatus, ConnectionType } from '@/constants/connection';
+import { ConnectionSyncStatus, ConnectionType } from '@/constants/connections';
 import { IConnectionDriverItem } from '@/types/connections';
 
 export interface IConnectionDetailRequest {
@@ -8,6 +8,7 @@ export interface IConnectionDetailRequest {
 }
 
 export interface IConnectionDetailResponse {
+  id: number;
   type: ConnectionType;
   name: string;
   host: string;
@@ -20,16 +21,17 @@ export interface IConnectionDetailResponse {
   oracleLoginRole?: string; // type为oracle必传 normal | sysdba |sysoper
   instance?: string; // type为sqlserver必传
   status: ConnectionSyncStatus;
+  errorMessage?: string;
   driver: IConnectionDriverItem;
   extendFields: object[];
 }
 
-class ConnectionDetailApi extends BaseApi<IConnectionDetailRequest, IConnectionDetailResponse> {
+class ConnectionsDetailApi extends BaseApi<IConnectionDetailRequest, IConnectionDetailResponse> {
   constructor() {
-    super({ url: ServiceMap.connectionDetail });
+    super({ url: ServiceMap.connectionsDetail });
   }
 }
 
-const connectionDetailApi = new ConnectionDetailApi();
+const connectionsDetailApi = new ConnectionsDetailApi();
 
-export { connectionDetailApi };
+export { connectionsDetailApi };

@@ -1,13 +1,51 @@
 .connectionInfoComplete {
   .title {
-    margin-top: 44px;
+    margin-top: 30px;
     text-align: center;
-    svg {
-      font-size: 40px;
+    .icon {
+      margin-right: 10px;
     }
-    span {
-      font-weight: 500;
-      font-size: var(--font-size-largest);
+  }
+  .messageBox {
+    margin-top: 40px;
+    font-size: var(--font-size-small);
+    .syncProgress {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      :global(.ant-progress-inner) {
+        border-radius: 3px;
+      }
+      :global(.ant-progress-bg) {
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+      }
+      :global(.ant-progress-text) {
+        position: absolute;
+        left: calc(50% - 28px);
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .stopBtn {
+        margin-left: 32px;
+      }
+    }
+    .syncStatus {
+      padding: 7px;
+    }
+    &.syncing {
+      color: var(--color-process);
+    }
+    &.success {
+      color: var(--color-success);
+    }
+    &.warning {
+      color: var(--color-warning);
+      background-color: var(--color-warning-light);
+    }
+    &.failed {
+      color: var(--color-error);
+      background-color: var(--color-error-light);
     }
   }
   .form {

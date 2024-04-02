@@ -5,7 +5,7 @@ import EmptyComponent from '@/components/empty-component';
 import ConnectionDetail from './detail';
 import MainContainer from '@/components/main-container';
 import { useRecoilValue } from 'recoil';
-import { connectionPageState } from '@/states/connection';
+import { connectionsPageState } from '@/states/connection';
 
 interface IConnectionProps {}
 
@@ -15,10 +15,10 @@ const componentsMap = {
   empty: EmptyComponent
 };
 
-export type ConnectionPage = keyof typeof componentsMap;
+export type ConnectionPages = keyof typeof componentsMap;
 
 const Connection: React.FC<IConnectionProps> = () => {
-  const curComponent = useRecoilValue(connectionPageState);
+  const curComponent = useRecoilValue(connectionsPageState);
 
   let CurComponentToRender = componentsMap[curComponent];
   return (

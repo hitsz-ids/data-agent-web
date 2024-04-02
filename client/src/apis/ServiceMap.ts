@@ -3,18 +3,23 @@ class ServiceMap {
   static system = '/api/system';
 
   // 数据接入
-  static connectionCreate = '/api/connections/create';
-  static connectionList = '/api/connections/list';
-  static connectionDetail = '/api/connections/detail';
-  static connectionUpdate = '/api/connections/update';
-  static connectionDelete = '/api/connections/delete';
+  static connectionsCreate = '/api/connections/create';
+  static connectionsList = '/api/connections/list';
+  static connectionsDetail = '/api/connections/detail';
+  static connectionsUpdate = '/api/connections/update';
+  static connectionsDelete = '/api/connections/delete';
 
-  static connectionSync = '/api/connections/sync';
-  static connectionSyncStatus = '/api/connections/sync/status';
-  static connectionSyncInterrupt = '/api/connections/sync/interrupt';
-  static connectionDriverList = '/api/connections/driver/list';
+  static connectionsSync = '/api/connections/sync';
+  static connectionsSyncStatus = '/api/connections/sync/status';
+  static connectionsSyncInterrupt = '/api/connections/sync/interrupt';
+  static connectionsDriverList = '/api/connections/driver/list';
 
-  static connectionTest = '/api/connections/test';
+  static connectionsTest = '/api/connections/test';
+
+  // 知识库
+
+  static knowledgeList = '/api/knowledges/list';
+  static knowledgeDetail = '/api/knowledges/detail';
 }
 
 export { ServiceMap };

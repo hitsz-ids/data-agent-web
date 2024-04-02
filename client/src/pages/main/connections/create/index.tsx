@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import styles from './index.module.less';
 import Steps, { IStepItem } from '@/components/steps';
-import { DatabaseConfigurationStep, ConnectionType } from '@/constants/connection';
+import { DatabaseConfigurationStep, ConnectionType } from '@/constants/connections';
 import DatabaseChoice from './database-choice';
 import { IConnectionDriverItem } from '@/types/connections';
 import ConnectionInfoComplete from './connection-info-complete';
@@ -15,6 +15,7 @@ const ConnectionCreate: React.FC<IConnectionCreateProps> = () => {
   const [curStepNum, setCurStepNum] = useState(DatabaseConfigurationStep.TYPE_SELECTION);
   const [curDriver, setCurDriver] = useState<IConnectionDriverItem | undefined>(undefined); // 当前驱动信息 [驱动名称, 驱动类型
   const [curType, setCurType] = useState<ConnectionType>(ConnectionType.MYSQL); // 当前驱动信息 [驱动名称, 驱动类型
+
   const next = (type: ConnectionType, driver: IConnectionDriverItem) => {
     setCurType(type);
     setCurDriver(driver);

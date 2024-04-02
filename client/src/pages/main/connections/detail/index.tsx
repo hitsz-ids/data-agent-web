@@ -2,15 +2,19 @@ import React from 'react';
 
 import styles from './index.module.less';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { connectionIdState, connectionInfoQuery, connectionPageState } from '@/states/connection';
+import {
+  connectionsIdState,
+  connectionsInfoQuery,
+  connectionsPageState
+} from '@/states/connection';
 import ConnectionInfoComplete from '../create/connection-info-complete';
 
 interface IConnectionDetailProps {}
 
 const ConnectionDetail: React.FC<IConnectionDetailProps> = () => {
-  const connectionId = useRecoilValue(connectionIdState);
-  const connectioninfo = useRecoilValue(connectionInfoQuery(connectionId));
-  const setConnectionPage = useSetRecoilState(connectionPageState);
+  const connectionsId = useRecoilValue(connectionsIdState);
+  const connectioninfo = useRecoilValue(connectionsInfoQuery(connectionsId));
+  const setConnectionPage = useSetRecoilState(connectionsPageState);
 
   return (
     <div className={styles.connectionDetail}>

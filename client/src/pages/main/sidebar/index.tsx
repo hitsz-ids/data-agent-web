@@ -3,7 +3,7 @@ import styles from './index.module.less';
 import { INavItem } from '@/types/common';
 import Iconfont from '@/components/iconfont';
 import classNames from 'classnames';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface ISidebarProps {
   navConfig: INavItem[];
@@ -11,7 +11,10 @@ interface ISidebarProps {
 
 const Sidebar: React.FC<ISidebarProps> = memo(props => {
   const { navConfig } = props;
-  const [activeIndex, setActivateIndex] = useState(0);
+  const location = useLocation();
+  let [activeIndex, setActivateIndex] = useState(
+    navConfig.findIndex(item => item.path === location.pathname)
+  );
   const navigate = useNavigate();
 
   return (
