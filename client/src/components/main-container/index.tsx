@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from './index.module.less';
 import { useRecoilState } from 'recoil';
-import { showLeftBoxState } from '@/states/main';
+import { showLeftBoxState } from '@/stores/main';
 import classNames from 'classnames';
 import Iconfont from '../iconfont';
 

@@ -19,7 +19,7 @@ import {
 } from '@/apis/connections/ConnectionsCreateApi';
 import { IConnectionDetailResponse } from '@/apis/connections/ConnectionsDetailApi';
 import {
-  connectionsIdState,
+  curConnectionIdState,
   connectionsPageState,
   useConnectionsListApi
 } from '@/states/connection';
@@ -55,7 +55,7 @@ const ConnectionInfoComplete: React.FC<IConnectionInfoCompleteProps> = props => 
   const [testLoading, setTestLoading] = useState(false);
   const [authVisible, setAuthVisible] = useState<boolean | null>(null);
   const connectionListApi = useConnectionsListApi();
-  const setConnectionId = useSetRecoilState(connectionsIdState);
+  const setCurConnectionId = useSetRecoilState(curConnectionIdState);
   const setConnectionsPageState = useSetRecoilState(connectionsPageState);
   const form = Form.useForm()[0];
 
@@ -94,7 +94,7 @@ const ConnectionInfoComplete: React.FC<IConnectionInfoCompleteProps> = props => 
   const handleSubmit = () => {
     connectionsCreateApi.request(getFormValues()).then(res => {
       message.success('数据接入创建成功');
-      setConnectionId(res.id);
+      setCurConnectionId(res.id);
       setConnectionsPageState('detail');
       connectionListApi();
     });
@@ -103,7 +103,7 @@ const ConnectionInfoComplete: React.FC<IConnectionInfoCompleteProps> = props => 
   const handleUpdate = () => {
     connectionsUpdateApi.request(getFormValues()).then(res => {
       message.success('数据接入更新成功');
-      setConnectionId(res.id);
+      setCurConnectionId(res.id);
       setConnectionsPageState('detail');
       connectionListApi();
     });

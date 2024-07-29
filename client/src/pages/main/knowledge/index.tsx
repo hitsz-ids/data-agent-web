@@ -1,31 +1,39 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import styles from './index.module.less';
 import MainContainer from '@/components/main-container';
-import { useRecoilValue } from 'recoil';
-import { knowledgePageState } from '@/states/knowledge';
+import { useRecoilState } from 'recoil';
+import { knowledgePageState } from '@/stores/knowledge';
 import KnowledgeList from './list';
+import EmptyComponent from '@/components/empty-component';
+import KnowledgeDetail from './detail';
 
 interface IKnowledgeProps {}
 
-const componentsMap = {
-  create: <div>create</div>,
-  detail: <div></div>,
-  empty: <div>empty</div>
+const EmptyContent = (
+  <EmptyComponent>
+    <div>知识库</div>
+  </EmptyComponent>
+);
+
+const pagesMap = {
+  detail: <KnowledgeDetail></KnowledgeDetail>,
+  empty: EmptyContent
 };
 
-export type KnowledgePage = keyof typeof componentsMap;
+export type KnowledgePage = keyof typeof pagesMap;
 
 const Knowledge: React.FC<IKnowledgeProps> = () => {
-  const curComponent = useRecoilValue(knowledgePageState);
+  const [curPage, setCurPage] = useRecoilState(knowledgePageState);
 
-  let CurComponentToRender = componentsMap[curComponent];
+  let CurPageComponent = pagesMap[curPage];
 
-  return (
-    <div className={styles.knowledgeBox}>
-      <MainContainer left={<KnowledgeList />} right={CurComponentToRender}></MainContainer>
-    </div>
-  );
+  useEffect(() => {
+    return () => {
+      setCurPage('empty');
+    };
+  }, []);
+
+  return <MainContainer left={<KnowledgeList />} right={CurPageComponent}></MainContainer>;
 };
 
 export default Knowledge;

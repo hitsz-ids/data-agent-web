@@ -1,34 +1,35 @@
 import React, { useEffect } from 'react';
-import { Checkbox, Dropdown } from 'antd';
+import { Checkbox } from 'antd';
 
 import styles from './index.module.less';
 import LinearButton from '@/components/linear-button';
 import SearchInput from '@/components/search-input';
-// import { knowledgeDeleteApi } from '@/apis/knowledge/KnowledgeDeleteApi';
 import classNames from 'classnames';
 import Iconfont from '@/components/iconfont';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
-  knowledgeIdState,
+  curKnowledgeIdState,
   knowledgeListState,
   knowledgePageState,
-  useKnowledgeListApi
-} from '@/states/knowledge';
-import { showLeftBoxState } from '@/states/main';
-import { ItemType } from 'antd/es/menu/hooks/useItems';
+  useKnowledgeListApi,
+  useRefreshKnowledgeInfo
+} from '@/stores/knowledge';
+import { showLeftBoxState } from '@/stores/main';
 import { useLang } from '@/i18n';
+import { knowledgeDeleteApi } from '@/apis/knowledge/KnowledgeDeleteApi';
 
 interface IKnowledgeListProps {}
 
 const KnowledgeList: React.FC<IKnowledgeListProps> = () => {
-  const [curId, setCurId] = React.useState<number>(0);
-  const knowledgeList = useRecoilValue(knowledgeListState);
   const [deleteState, setDeleteState] = React.useState<boolean>(false);
   const [checkedIds, setCheckedIds] = React.useState<number[]>([]);
   const [checkAll, setCheckAll] = React.useState<boolean>(false);
+
+  const [curId, setCurId] = useRecoilState(curKnowledgeIdState);
+  const knowledgeList = useRecoilValue(knowledgeListState);
   const setKnowledgePageState = useSetRecoilState(knowledgePageState);
-  const setKnowledgeIdState = useSetRecoilState(knowledgeIdState);
   const setShowLeftBox = useSetRecoilState(showLeftBoxState);
+  const refreshKnowledgeInfo = useRefreshKnowledgeInfo(useRecoilValue(curKnowledgeIdState));
 
   const listApi = useKnowledgeListApi();
   const { t } = useLang();
@@ -46,13 +47,13 @@ const KnowledgeList: React.FC<IKnowledgeListProps> = () => {
   };
 
   const handleDeleteClick = (ids: number[]) => {
-    // if (!ids.length || knowledgeDeleteApi.loading) return;
-    // knowledgeDeleteApi.request({ ids }).then(() => {
-    //   setCheckedIds([]);
-    //   getList();
-    //   setDeleteState(false);
-    //   setCheckAll(false);
-    // });
+    if (!ids.length || knowledgeDeleteApi.loading) return;
+    knowledgeDeleteApi.request({ ids }).then(() => {
+      setCheckedIds([]);
+      getList();
+      setDeleteState(false);
+      setCheckAll(false);
+    });
   };
 
   const deleteCheckedChange = (values: number[]) => {
@@ -63,63 +64,13 @@ const KnowledgeList: React.FC<IKnowledgeListProps> = () => {
     setShowLeftBox(false);
   };
 
-  const moreOptions: ItemType[] = [
-    {
-      key: 'connect',
-      label: (
-        <Iconfont className={styles.dropdownIcon} code="connect" hover>
-          {t('knowledge.connect')}
-        </Iconfont>
-      )
-    },
-    {
-      key: 'sync',
-      label: (
-        <Iconfont className={styles.dropdownIcon} code="reload" hover>
-          {t('common.sync')}
-        </Iconfont>
-      )
-    },
-    {
-      key: 'delete',
-      label: (
-        <Iconfont className={styles.dropdownIcon} code="delete" hover>
-          {t('common.delete')}
-        </Iconfont>
-      )
-    }
-  ];
-
-  const handleMenuClick = ({ key, id }: { key: string; id: number }) => {
-    if (key === 'connect') {
-      console.log('connect', id);
-    } else if (key === 'sync') {
-      // knowledgeSyncApi
-      //   .request({ id })
-      //   .then(() => {
-      //     message.success(t('common.sync.success'));
-      //   })
-      //   .catch(() => {
-      //     message.error(t('common.sync.fail'));
-      //   });
-    } else if (key === 'delete') {
-      handleDeleteClick([id]);
-    }
-  };
-
   return (
     <div className={styles.knowledgeLeft}>
       <div className={styles.leftTop}>
-        <LinearButton
-          size="large"
-          onClick={() => {
-            setKnowledgePageState('create');
-            setKnowledgeIdState(0);
-          }}
-        >
+        <LinearButton size="large" onClick={() => {}}>
           <Iconfont code="add">
             {t('common.create')}
-            {t('knowledge.connect')}
+            {t('knowledge.knowledge')}
           </Iconfont>
         </LinearButton>
       </div>
@@ -142,8 +93,8 @@ const KnowledgeList: React.FC<IKnowledgeListProps> = () => {
                 className={classNames(styles.item, curId === item.id ? styles.isActive : null)}
                 onClick={() => {
                   if (deleteState) return;
+                  refreshKnowledgeInfo();
                   setCurId(item.id);
-                  setKnowledgeIdState(item.id);
                   setKnowledgePageState('detail');
                 }}
               >
@@ -153,24 +104,17 @@ const KnowledgeList: React.FC<IKnowledgeListProps> = () => {
                   </div>
                 )}
                 <label htmlFor={item.id + ''} className={styles.infoArea}>
-                  <div className={styles.info}>
-                    <span className={classNames(styles.name, 'text-ellipsis')}>{item.name}</span>
-                  </div>
+                  <div className={classNames(styles.name, 'text-ellipsis')}>{item.name}</div>
+                  <div className={styles.time}>{item.createdTime}</div>
                 </label>
-                <Dropdown
-                  menu={{
-                    items: moreOptions,
-                    onClick: ({ key, domEvent }) => {
-                      domEvent.stopPropagation();
-                      handleMenuClick({ key, id: item.id });
-                    }
+                <Iconfont
+                  className={styles.deleteBtn}
+                  code="delete"
+                  onClick={() => {
+                    handleDeleteClick([item.id]);
                   }}
-                  trigger={['click']}
-                >
-                  <span onClick={event => event.stopPropagation()}>
-                    <Iconfont className={styles.moreIcon} code={'more'}></Iconfont>
-                  </span>
-                </Dropdown>
+                  hover
+                ></Iconfont>
               </div>
             );
           })}

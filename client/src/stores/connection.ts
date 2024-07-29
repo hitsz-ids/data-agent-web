@@ -14,13 +14,13 @@ const connectionsPageState = atom<ConnectionPages>({
   default: 'empty'
 });
 
-const connectionsIdState = atom({
+const curConnectionIdState = atom({
   key: 'ConnectionId',
   default: 0
 });
 
 const connectionsRequestIdState = atomFamily({
-  key: 'connectionsRequestIdState',
+  key: 'ConnectionsRequestIdState',
   default: 0
 });
 
@@ -57,5 +57,5 @@ const useConnectionsListApi = () => {
   };
 };
 
-export { connectionsListState, connectionsIdState, connectionsPageState };
+export { connectionsListState, curConnectionIdState, connectionsPageState };
 export { connectionsInfoQuery, useRefreshConnectionInfo, useConnectionsListApi };

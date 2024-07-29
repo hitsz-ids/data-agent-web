@@ -25,7 +25,7 @@ const App: React.FC = () => {
   const { t } = useLang();
 
   useEffect(() => {
-    // getSystemInfo();
+    getSystemInfo();
   }, []);
 
   function getSystemInfo() {
@@ -35,7 +35,7 @@ const App: React.FC = () => {
     isLoading.current = true;
     return systemApi
       .send()
-      .then(() => {
+      .then(dd => {
         setInitState(InitState.DONE);
       })
       .finally(() => {

@@ -7,14 +7,15 @@ import SearchInput from '@/components/search-input';
 import { connectionsDeleteApi } from '@/apis/connections/ConnectionsDeleteApi';
 import classNames from 'classnames';
 import Iconfont from '@/components/iconfont';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
-  connectionsIdState,
+  curConnectionIdState,
   connectionsListState,
   connectionsPageState,
+  useRefreshConnectionInfo,
   useConnectionsListApi
 } from '@/states/connection';
-import { showLeftBoxState } from '@/states/main';
+import { showLeftBoxState } from '@/stores/main';
 import ConnectionStatusIcon from '@/components/connection-status';
 import ConnectionTypeIcon from '@/components/connection-type';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
@@ -24,14 +25,15 @@ import { useLang } from '@/i18n';
 interface IConnectionListProps {}
 
 const ConnectionList: React.FC<IConnectionListProps> = () => {
-  const [curId, setCurId] = React.useState<number>(0);
-  const connectionList = useRecoilValue(connectionsListState);
   const [deleteState, setDeleteState] = React.useState<boolean>(false);
   const [checkedIds, setCheckedIds] = React.useState<number[]>([]);
   const [checkAll, setCheckAll] = React.useState<boolean>(false);
-  const setConnectionsPageState = useSetRecoilState(connectionsPageState);
-  const setConnectionsIdState = useSetRecoilState(connectionsIdState);
+
+  const [curConnectionId, setConnectionsId] = useRecoilState(curConnectionIdState);
+  const connectionList = useRecoilValue(connectionsListState);
   const setShowLeftBox = useSetRecoilState(showLeftBoxState);
+  const setConnectionsPageState = useSetRecoilState(connectionsPageState);
+  const connectionInfoRefresh = useRefreshConnectionInfo(useRecoilValue(curConnectionIdState));
 
   const listApi = useConnectionsListApi();
   const { t } = useLang();
@@ -118,7 +120,7 @@ const ConnectionList: React.FC<IConnectionListProps> = () => {
           size="large"
           onClick={() => {
             setConnectionsPageState('create');
-            setConnectionsIdState(0);
+            setConnectionsId(0);
           }}
         >
           <Iconfont code="add">
@@ -144,11 +146,14 @@ const ConnectionList: React.FC<IConnectionListProps> = () => {
               return (
                 <div
                   key={item.id}
-                  className={classNames(styles.item, curId === item.id ? styles.isActive : null)}
+                  className={classNames(
+                    styles.item,
+                    curConnectionId === item.id ? styles.isActive : null
+                  )}
                   onClick={() => {
                     if (deleteState) return;
-                    setCurId(item.id);
-                    setConnectionsIdState(item.id);
+                    connectionInfoRefresh();
+                    setConnectionsId(item.id);
                     setConnectionsPageState('detail');
                   }}
                 >

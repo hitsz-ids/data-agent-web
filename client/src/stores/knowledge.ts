@@ -5,22 +5,22 @@ import { IKnowledgeItem } from '@/types/knowledge';
 import { atom, atomFamily, selectorFamily, useSetRecoilState } from 'recoil';
 
 const knowledgeListState = atom<IKnowledgeItem[]>({
-  key: 'knowledgeList',
+  key: 'KnowledgeList',
   default: []
 });
 
 const knowledgePageState = atom<KnowledgePage>({
-  key: 'knowledgePage',
+  key: 'KnowledgePage',
   default: 'empty'
 });
 
-const knowledgeIdState = atom({
-  key: 'knowledgeId',
+const curKnowledgeIdState = atom({
+  key: 'KnowledgeId',
   default: 0
 });
 
 const knowledgeRequestIdState = atomFamily({
-  key: 'knowledgeRequestIdState',
+  key: 'KnowledgeRequestIdState',
   default: 0
 });
 
@@ -38,9 +38,9 @@ const knowledgeInfoQuery = selectorFamily({
 });
 
 const useRefreshKnowledgeInfo = (id: number) => {
-  const setUserInfoQueryRequestID = useSetRecoilState(knowledgeRequestIdState(id));
+  const setKnowledgeInfoQueryRequestID = useSetRecoilState(knowledgeRequestIdState(id));
   return () => {
-    setUserInfoQueryRequestID(requestId => requestId + 1);
+    setKnowledgeInfoQueryRequestID(requestId => requestId + 1);
   };
 };
 
@@ -57,5 +57,5 @@ const useKnowledgeListApi = () => {
   };
 };
 
-export { knowledgeListState, knowledgeIdState, knowledgePageState };
+export { knowledgeListState, curKnowledgeIdState, knowledgePageState };
 export { knowledgeInfoQuery, useRefreshKnowledgeInfo, useKnowledgeListApi };

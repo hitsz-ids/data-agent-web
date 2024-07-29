@@ -17,7 +17,7 @@ interface IConnectionTypeIconProps extends React.HTMLAttributes<HTMLDivElement> 
   type: ConnectionType;
   showName?: boolean;
   className?: string;
-  size: 'default' | 'large';
+  size?: 'default' | 'large';
 }
 
 const ConnectionTypeIcon: React.FC<IConnectionTypeIconProps> = props => {

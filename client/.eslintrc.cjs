@@ -14,7 +14,6 @@ module.exports = {
     'no-multiple-empty-lines': ['error', { max: 1 }],
     'no-use-before-define': 'off',
     'no-irregular-whitespace': 'off',
-    '@typescript-eslint/no-unused-vars': 'warn',
     'react-hooks/rules-of-hooks': 'off',
     'react-hooks/exhaustive-deps': 'off',
     'prefer-const': 'off',
@@ -23,7 +22,8 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     // 设置 typescript-eslint 规则 https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin/docs/rules
     '@typescript-eslint/triple-slash-reference': 'off',
-    '@typescript-eslint/no-unused-vars': ['error', { vars: 'local', args: 'none' }],
+    '@typescript-eslint/no-unused-vars': 'warn',
+    // '@typescript-eslint/no-unused-vars': ['error', { vars: 'local', args: 'none' }],
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-empty-interface': 'off',

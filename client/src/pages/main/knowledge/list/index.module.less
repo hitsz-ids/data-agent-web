@@ -27,9 +27,8 @@
         display: flex;
         position: relative;
         margin-bottom: 12px;
-        padding: 0 11px;
+        padding: 7px 10px;
         width: 100%;
-        height: 46px;
         border: 1px solid var(--bg-color-cell);
         border-radius: 5px;
         cursor: pointer;
@@ -58,23 +57,14 @@
           }
         }
         .infoArea {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          min-width: 0;
+          width: calc(100% - 20px);
           cursor: inherit;
-          .info {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            .name {
-              line-height: 20px;
-              max-width: calc(100% - 16px - 50px);
-              margin: 0 7px;
-            }
+          .time {
+            font-size: var(--font-size-small);
+            color: var(--text-color-extra-light);
           }
         }
-        .moreIcon {
+        .deleteBtn {
           position: absolute;
           display: none;
           right: 10px;
@@ -84,19 +74,17 @@
 
         &:hover {
           background: var(--bg-color-hover);
-
-          .moreIcon {
+          .deleteBtn {
             display: block;
           }
         }
-
         &.isActive {
           background: var(--bg-color-active);
           border-color: var(--bg-color-active);
         }
       }
       &.deleteState {
-        .moreIcon {
+        .deleteBtn {
           display: none !important;
         }
       }
