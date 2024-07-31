@@ -22,7 +22,7 @@ import {
   curConnectionIdState,
   connectionsPageState,
   useConnectionsListApi
-} from '@/states/connection';
+} from '@/stores/connection';
 import { useSetRecoilState } from 'recoil';
 import { connectionsUpdateApi } from '@/apis/connections/ConnectionsUpdateApi';
 import classNames from 'classnames';

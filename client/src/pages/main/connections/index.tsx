@@ -5,7 +5,7 @@ import EmptyComponent from '@/components/empty-component';
 import ConnectionDetail from './detail';
 import MainContainer from '@/components/main-container';
 import { useRecoilState } from 'recoil';
-import { connectionsPageState } from '@/states/connection';
+import { connectionsPageState } from '@/stores/connection';
 
 interface IConnectionProps {}
 

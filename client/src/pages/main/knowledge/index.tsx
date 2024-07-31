@@ -11,7 +11,7 @@ interface IKnowledgeProps {}
 
 const EmptyContent = (
   <EmptyComponent>
-    <div>知识库</div>
+    <div>EmptyContent</div>
   </EmptyComponent>
 );
 

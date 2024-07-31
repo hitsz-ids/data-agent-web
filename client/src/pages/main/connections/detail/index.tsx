@@ -6,7 +6,7 @@ import {
   curConnectionIdState,
   connectionsInfoQuery,
   connectionsPageState
-} from '@/states/connection';
+} from '@/stores/connection';
 import ConnectionInfoComplete from '../create/connection-info-complete';
 
 interface IConnectionDetailProps {}

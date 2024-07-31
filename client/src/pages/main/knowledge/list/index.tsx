@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Checkbox } from 'antd';
+import { Button, Checkbox } from 'antd';
 
 import styles from './index.module.less';
 import LinearButton from '@/components/linear-button';
@@ -33,6 +33,7 @@ const KnowledgeList: React.FC<IKnowledgeListProps> = () => {
 
   const listApi = useKnowledgeListApi();
   const { t } = useLang();
+  console.log(123);
 
   useEffect(() => {
     getList();
@@ -75,6 +76,7 @@ const KnowledgeList: React.FC<IKnowledgeListProps> = () => {
         </LinearButton>
       </div>
       <div className={styles.leftMiddle}>
+        <Button onClick={() => setCheckAll(!checkAll)}>+</Button>
         <div className={styles.searchInput}>
           <SearchInput
             placeholder={t('knowledge.list.search')}

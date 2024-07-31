@@ -14,7 +14,7 @@ import {
   connectionsPageState,
   useRefreshConnectionInfo,
   useConnectionsListApi
-} from '@/states/connection';
+} from '@/stores/connection';
 import { showLeftBoxState } from '@/stores/main';
 import ConnectionStatusIcon from '@/components/connection-status';
 import ConnectionTypeIcon from '@/components/connection-type';
