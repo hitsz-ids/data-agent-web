@@ -1,6 +1,5 @@
 enum RoutePath {
   APP = '/',
-  WITHOUT_MATCH = '*',
 
   LOGIN = '/login',
 
@@ -9,6 +8,7 @@ enum RoutePath {
   KNOWLEDGE = '/main/knowledge',
   CONNECTION = '/main/connection',
 
-  TEST = '/test'
+  TEST = '/test',
+  WITHOUT_MATCH = '*'
 }
 export default RoutePath;

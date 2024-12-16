@@ -7,7 +7,6 @@ import Main from '@/pages/main';
 
 const Test = AsyncComponent(lazy(() => import('@/pages/test')));
 const ErrorPage = AsyncComponent(lazy(() => import('@/pages/error')));
-
 const Chat = AsyncComponent(lazy(() => import('@/pages/main/chat')));
 const Knowledge = AsyncComponent(lazy(() => import('@/pages/main/knowledge')));
 const Connection = AsyncComponent(lazy(() => import('@/pages/main/connections')));

@@ -4,7 +4,7 @@ import styles from './index.module.less';
 
 interface IMyComponentProps {}
 
-const MyComponent: React.FC<IMyComponentProps> = props => {
+const MyComponent: React.FC<IMyComponentProps> = () => {
   useEffect(() => {
     // Fetch data or perform any side effects here
   }, []);

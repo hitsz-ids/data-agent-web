@@ -23,7 +23,6 @@ module.exports = {
     // 设置 typescript-eslint 规则 https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin/docs/rules
     '@typescript-eslint/triple-slash-reference': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
-    // '@typescript-eslint/no-unused-vars': ['error', { vars: 'local', args: 'none' }],
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-empty-interface': 'off',

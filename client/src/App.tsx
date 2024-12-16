@@ -12,6 +12,7 @@ import { ConfigProvider } from 'antd';
 import systemApi from './apis/SystemApi';
 
 initLang();
+
 themeManager.init();
 
 enum InitState {
@@ -35,7 +36,7 @@ const App: React.FC = () => {
     isLoading.current = true;
     return systemApi
       .send()
-      .then(dd => {
+      .then(() => {
         setInitState(InitState.DONE);
       })
       .finally(() => {

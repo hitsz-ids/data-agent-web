@@ -9,7 +9,7 @@ import Iconfont from '@/components/iconfont';
 
 interface IKnowledgeDetailProps {}
 
-const KnowledgeDetail: React.FC<IKnowledgeDetailProps> = props => {
+const KnowledgeDetail: React.FC<IKnowledgeDetailProps> = () => {
   const connectionInfo = useRecoilValue(knowledgeInfoQuery(useRecoilValue(curKnowledgeIdState)));
 
   useEffect(() => {}, []);
